@@ -39,9 +39,9 @@ function fnAddToTransactions() {
 
     totalAmt += Number(income);
   }
-  remainingBalance.innerHTML =
-    Number(remainingBalance.innerHTML.replace("$", "")) + totalAmt + "$";
+
   totalIncome.innerHTML = totalAmt + "$";
+  console.log(totalAmt);
   totalAmt = 0;
   for (i = 0; i < getExpenses.length; i++) {
     let income = getExpenses[i]
@@ -50,9 +50,11 @@ function fnAddToTransactions() {
 
     totalAmt += Number(income);
   }
-  remainingBalance.innerHTML =
-    Number(remainingBalance.innerHTML.replace("$", "")) - totalAmt + "$";
   totalExpense.innerHTML = totalAmt + "$";
+  remainingBalance.innerHTML =
+    Number(totalIncome.innerHTML.replace("$", "")) -
+    Number(totalExpense.innerHTML.replace("$", "")) +
+    "$";
   fnClearFields();
 }
 
