@@ -116,3 +116,8 @@ button {
 select:invalid {
   color: gray;
 }
+
+button:disabled {
+  background-color: #cccccc;
+  color: #666666;
+}

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="index.js"></script>
+    <script src="index.js" defer></script>
 
     <link rel="stylesheet" href="style.css" />
     <link
@@ -17,51 +17,56 @@
       <h1 class="logo">Expense Tracker</h1>
       <div class="balance">
         <h2>Remaining Balance</h2>
-        <h1>150$</h1>
+        <h1>0$</h1>
       </div>
       <div class="creditdebit">
         <div class="income">
           <h3>Income</h3>
-          <h2>300$</h2>
+          <h2>0$</h2>
         </div>
         <div class="expense">
           <h3>Expense</h3>
-          <h2>150$</h2>
+          <h2>0$</h2>
         </div>
       </div>
       <div class="history">
         <h2>History</h2>
-        <div class="item item-plus">
-          <p>Salary</p>
-          <p class="amount">1000$</p>
-        </div>
-        <div class="item item-minus">
-          <p>Rent</p>
-          <p class="amount">300$</p>
-        </div>
-        <div class="item item-minus">
-          <p>Groceries</p>
-          <p class="amount">150$</p>
-        </div>
+        <p class="NA" style="margin-top: 10px;">NA</p>
       </div>
       <div class="transaction">
         <h2>Add new transaction</h2>
-        <div class="form">
+        <div id="form" class="form">
           <div class="form-group itemwhole">
-            <input type="text" class="form-control" placeholder="Add Name" />
+            <input
+              type="text"
+              class="form-control required-field"
+              id="transaction-name"
+              placeholder="Add Name"
+            />
           </div>
           <div class="form-group othercontrols">
-            <input type="text" placeholder="Amount" class="form-control" />
+            <input
+              type="number"
+              placeholder="Amount"
+              id="transaction-amount"
+              class="form-control required-field"
+            />
           </div>
           <div class="form-group othercontrols-select">
-            <select required class="form-control">
+            <select
+              required
+              class="form-control required-field"
+              id="transaction-type"
+            >
               <option value="">Transaction</option>
               <option value="Expence">Expense</option>
               <option value="Income">Income</option>
             </select>
           </div>
           <div class="form-group othercontrols">
-            <button type="submit" class="form-control">Add</button>
+            <button type="submit" id="add-transaction" class="form-control">
+              Add
+            </button>
           </div>
         </div>
       </div>
