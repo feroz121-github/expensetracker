@@ -81,4 +81,5 @@ function fnClearFields() {
   if (naParagraph != undefined) {
     naParagraph.remove();
   }
+  btnAddTransaction.setAttribute("disabled", true);
 }
