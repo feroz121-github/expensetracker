@@ -60,7 +60,8 @@ body {
   background-color: #a93226;
 }
 
-.history .item-minus p {
+.history .item-minus p,
+.history .item-plus p {
   color: white;
 }
 

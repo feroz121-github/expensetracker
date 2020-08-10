@@ -24,7 +24,7 @@ function fnAddToTransactions() {
   let transType = tType == "Income" ? "item-plus" : "item-minus";
   transHistory.innerHTML += `<div class="item ${transType}">
      <p>${tName}</p>
-     <p class="amount">${tAmount}$</p>
+     <p class="amount">${fnNumWithDecimals(tAmount)}$</p>
      </div>`;
 
   //Recalculating total income and expenses
@@ -37,7 +37,7 @@ function fnAddToTransactions() {
       .getElementsByClassName("amount")[0]
       .innerHTML.replace("$", "");
 
-    totalAmt += Number(income);
+    totalAmt += fnNumWithDecimals(income);
   }
 
   totalIncome.innerHTML = totalAmt + "$";
@@ -48,12 +48,12 @@ function fnAddToTransactions() {
       .getElementsByClassName("amount")[0]
       .innerHTML.replace("$", "");
 
-    totalAmt += Number(income);
+    totalAmt += fnNumWithDecimals(income);
   }
   totalExpense.innerHTML = totalAmt + "$";
   remainingBalance.innerHTML =
-    Number(totalIncome.innerHTML.replace("$", "")) -
-    Number(totalExpense.innerHTML.replace("$", "")) +
+    fnNumWithDecimals(totalIncome.innerHTML.replace("$", "")) -
+    fnNumWithDecimals(totalExpense.innerHTML.replace("$", "")) +
     "$";
   fnClearFields();
 }
@@ -82,4 +82,8 @@ function fnClearFields() {
     naParagraph.remove();
   }
   btnAddTransaction.setAttribute("disabled", true);
+}
+
+function fnNumWithDecimals(num) {
+  return Math.round((Number(num) + Number.EPSILON) * 100) / 100;
 }
