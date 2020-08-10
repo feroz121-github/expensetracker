@@ -26,7 +26,11 @@ function fnAddToTransactions() {
      <p>${tName}</p>
      <p class="amount">${fnNumWithDecimals(tAmount)}$</p>
      </div>`;
+  fnCalcIncomeExpenses();
+  fnClearFields();
+}
 
+function fnCalcIncomeExpenses() {
   //Recalculating total income and expenses
   let getIncome = transHistory.getElementsByClassName("item-plus");
   let getExpenses = transHistory.getElementsByClassName("item-minus");
@@ -41,7 +45,6 @@ function fnAddToTransactions() {
   }
 
   totalIncome.innerHTML = totalAmt + "$";
-  console.log(totalAmt);
   totalAmt = 0;
   for (i = 0; i < getExpenses.length; i++) {
     let income = getExpenses[i]
@@ -55,7 +58,6 @@ function fnAddToTransactions() {
     fnNumWithDecimals(totalIncome.innerHTML.replace("$", "")) -
     fnNumWithDecimals(totalExpense.innerHTML.replace("$", "")) +
     "$";
-  fnClearFields();
 }
 
 function fnToggleAddButton() {
