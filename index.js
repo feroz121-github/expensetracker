@@ -4,6 +4,7 @@ let transHistory = document.getElementsByClassName("history")[0];
 let totalIncome = document.querySelector(".creditdebit .income h2");
 let totalExpense = document.querySelector(".creditdebit .expense h2");
 let remainingBalance = document.querySelector(".balance h1");
+let btnDeleteTransaction = document.querySelector(".delete");
 let tName, tAmount, tType;
 
 //On doc ready
@@ -20,11 +21,24 @@ for (i = 0; i < formRequiredFileds.length; i++) {
   });
 }
 
+document.addEventListener("click", function (e) {
+  if (e.target && e.target.nodeName != "HTML") {
+    if (e.target.parentElement.className == "delete") {
+      let rowToDelete = e.target.parentElement.parentElement;
+      rowToDelete.remove();
+      fnCalcIncomeExpenses();
+    }
+  }
+});
+
 function fnAddToTransactions() {
   let transType = tType == "Income" ? "item-plus" : "item-minus";
   transHistory.innerHTML += `<div class="item ${transType}">
-     <p>${tName}</p>
-     <p class="amount">${fnNumWithDecimals(tAmount)}$</p>
+     
+     <p class="edit" style="display:none"><i class="fas fa-pen"></i></p>
+     <p class="delete"><i class="fas fa-trash"></i></p>
+     <p class="transName">${tName}</p>
+     <p class="amount">${Number(fnNumWithDecimals(tAmount))}$</p>
      </div>`;
   fnCalcIncomeExpenses();
   fnClearFields();
@@ -41,7 +55,7 @@ function fnCalcIncomeExpenses() {
       .getElementsByClassName("amount")[0]
       .innerHTML.replace("$", "");
 
-    totalAmt += fnNumWithDecimals(income);
+    totalAmt += Number(income);
   }
 
   totalIncome.innerHTML = totalAmt + "$";
@@ -51,13 +65,14 @@ function fnCalcIncomeExpenses() {
       .getElementsByClassName("amount")[0]
       .innerHTML.replace("$", "");
 
-    totalAmt += fnNumWithDecimals(income);
+    totalAmt += Number(income);
   }
   totalExpense.innerHTML = totalAmt + "$";
   remainingBalance.innerHTML =
-    fnNumWithDecimals(totalIncome.innerHTML.replace("$", "")) -
-    fnNumWithDecimals(totalExpense.innerHTML.replace("$", "")) +
-    "$";
+    Number(
+      fnNumWithDecimals(totalIncome.innerHTML.replace("$", "")) -
+        fnNumWithDecimals(totalExpense.innerHTML.replace("$", ""))
+    ) + "$";
 }
 
 function fnToggleAddButton() {
@@ -86,6 +101,21 @@ function fnClearFields() {
   btnAddTransaction.setAttribute("disabled", true);
 }
 
-function fnNumWithDecimals(num) {
-  return Math.round((Number(num) + Number.EPSILON) * 100) / 100;
+function fnNumWithDecimals(n) {
+  let num = n;
+  console.log(num);
+
+  var negative = false;
+  digits = 2;
+  if (n < 0) {
+    negative = true;
+    n = n * -1;
+  }
+  var multiplicator = Math.pow(10, digits);
+  n = parseFloat((n * multiplicator).toFixed(11));
+  n = (Math.round(n) / multiplicator).toFixed(2);
+  if (negative) {
+    n = (n * -1).toFixed(2);
+  }
+  return n;
 }
