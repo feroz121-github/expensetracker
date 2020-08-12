@@ -5,6 +5,7 @@ let totalIncome = document.querySelector(".creditdebit .income h2");
 let totalExpense = document.querySelector(".creditdebit .expense h2");
 let remainingBalance = document.querySelector(".balance h1");
 let btnDeleteTransaction = document.querySelector(".delete");
+let btnEditTransaction = document.querySelector(".edit");
 let tName, tAmount, tType;
 
 //On doc ready
@@ -28,18 +29,58 @@ document.addEventListener("click", function (e) {
       rowToDelete.remove();
       fnCalcIncomeExpenses();
     }
+
+    if (e.target.parentElement.className == "edit") {
+      let allTransactions =
+        e.target.parentElement.parentElement.parentElement.children;
+      for (let transaction of allTransactions) {
+        transaction.classList.remove("row-onedit");
+      }
+      let rowToEdit = e.target.parentElement.parentElement;
+      rowToEdit.classList.add("row-onedit");
+
+      let selectedTName = rowToEdit.querySelector("p.transName").innerHTML;
+      let selectedTAmount = rowToEdit.querySelector("p.amount").innerHTML;
+      let selectedClass = rowToEdit.classList;
+      let selectedTType =
+        selectedClass.value.indexOf("item-plus") > -1 ? "Income" : "Expense";
+      //console.log(selectedTType);
+      fnSetValues(
+        selectedTName,
+        selectedTAmount.replace("$", ""),
+        selectedTType
+      );
+      btnAddTransaction.innerHTML = "Update";
+      btnAddTransaction.removeAttribute("disabled");
+    }
   }
 });
 
-function fnAddToTransactions() {
+function fnAddToTransactions(e) {
   let transType = tType == "Income" ? "item-plus" : "item-minus";
-  transHistory.innerHTML += `<div class="item ${transType}">
+
+  if (e.target.textContent == "Update") {
+    transHistory
+      .querySelector("div.row-onedit")
+      .querySelector(".transName").innerHTML = tName;
+    transHistory
+      .querySelector("div.row-onedit")
+      .querySelector(".amount").innerHTML = tAmount;
+    transHistory
+      .querySelector("div.row-onedit")
+      .classList.remove("item-plus", "item-minus");
+    transHistory.querySelector("div.row-onedit").classList.add(transType);
+    transHistory.querySelector("div.row-onedit").classList.remove("row-onedit");
+    btnAddTransaction.innerHTML = "Add";
+  } else {
+    transHistory.innerHTML += `<div class="item ${transType}">
      
-     <p class="edit" style="display:none"><i class="fas fa-pen"></i></p>
+     <p class="edit"><i class="fas fa-pen"></i></p>
      <p class="delete"><i class="fas fa-trash"></i></p>
      <p class="transName">${tName}</p>
      <p class="amount">${Number(fnNumWithDecimals(tAmount))}$</p>
      </div>`;
+  }
   fnCalcIncomeExpenses();
   fnClearFields();
 }
@@ -76,7 +117,7 @@ function fnCalcIncomeExpenses() {
 }
 
 function fnToggleAddButton() {
-  fnSetValues();
+  fnGetValues();
   if (tName && tAmount && tType) {
     btnAddTransaction.removeAttribute("disabled");
   } else {
@@ -84,10 +125,16 @@ function fnToggleAddButton() {
   }
 }
 
-function fnSetValues() {
+function fnGetValues() {
   tName = document.getElementById("transaction-name").value;
   tAmount = document.getElementById("transaction-amount").value;
   tType = document.getElementById("transaction-type").value;
+}
+
+function fnSetValues(tName, tAmount, tType) {
+  document.getElementById("transaction-name").value = tName;
+  document.getElementById("transaction-amount").value = tAmount;
+  document.getElementById("transaction-type").value = tType;
 }
 
 function fnClearFields() {
@@ -103,8 +150,6 @@ function fnClearFields() {
 
 function fnNumWithDecimals(n) {
   let num = n;
-  console.log(num);
-
   var negative = false;
   digits = 2;
   if (n < 0) {
